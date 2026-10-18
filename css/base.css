@@ -1,0 +1,146 @@
+/* ==========================================================================
+   base.css — resets, typography, buttons, inputs, tiny utilities.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  font-size: calc(16px * var(--text-scale));
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg-deep);
+  color-scheme: light dark;
+}
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  line-height: calc(1.55 * var(--line-gap));
+  color: var(--ink);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-ui); font-weight: 700; line-height: 1.1; margin: 0; letter-spacing: 0.01em; }
+p { margin: 0 0 0.9em; }
+p:last-child { margin-bottom: 0; }
+a { color: inherit; text-decoration: underline; text-underline-offset: 0.2em; text-decoration-thickness: 2px; }
+a:hover { background: var(--inv-bg); color: var(--inv-ink); text-decoration-color: transparent; }
+ul, ol { margin: 0; padding-left: 1.25em; }
+img { max-width: 100%; display: block; }
+button, input, select, textarea { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--card);
+}
+
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip {
+  position: fixed; left: 0.75rem; top: -4rem; z-index: 1000;
+  background: var(--inv-bg); color: var(--inv-ink); padding: 0.6rem 1rem;
+  font-family: var(--font-ui); text-decoration: none;
+}
+.skip:focus { top: 0.75rem; }
+
+/* ---- buttons ----------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 2.5rem; padding: 0.4rem 1rem;
+  font-family: var(--font-ui); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  background: var(--card); color: var(--ink);
+  border: var(--bw) solid var(--line);
+  cursor: pointer; text-decoration: none;
+  transition: transform 0.15s var(--ease), background 0.15s, color 0.15s, box-shadow 0.15s;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+.btn:hover:not(:disabled) { background: var(--inv-bg); color: var(--inv-ink); transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--shadow); }
+.btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.btn--primary { background: var(--inv-bg); color: var(--inv-ink); }
+.btn--primary:hover:not(:disabled) { background: var(--card); color: var(--ink); }
+.btn--small { min-height: 2rem; padding: 0.2rem 0.65rem; font-size: 0.8rem; }
+.btn--ghost { box-shadow: none; background: transparent; }
+.btn--danger { border-style: dashed; }
+.btn[aria-pressed="true"] { background: var(--inv-bg); color: var(--inv-ink); }
+
+.iconbtn {
+  display: inline-grid; place-items: center; width: 2.5rem; height: 2.5rem;
+  background: var(--card); border: var(--bw) solid var(--line); cursor: pointer;
+  font-family: var(--font-ui); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.03em;
+  transition: background 0.15s, color 0.15s, transform 0.15s var(--ease);
+}
+.iconbtn:hover:not(:disabled) { background: var(--inv-bg); color: var(--inv-ink); transform: translateY(-2px); }
+.iconbtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.iconbtn[aria-pressed="true"] { background: var(--inv-bg); color: var(--inv-ink); }
+.iconbtn svg { width: 1.2rem; height: 1.2rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; stroke-linejoin: miter; }
+
+/* ---- form controls ------------------------------------------------------ */
+.field { display: grid; gap: 0.3rem; margin-bottom: 1rem; }
+.field > label, .field > .label, legend.label { font-family: var(--font-ui); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.field .help { font-size: 0.82rem; color: var(--ink-2); margin: 0; }
+input[type="text"], input[type="search"], input[type="number"], input[type="date"], input[type="month"],
+input[type="datetime-local"], input[type="url"], select, textarea {
+  width: 100%; min-height: 2.5rem; padding: 0.45rem 0.65rem;
+  background: var(--card); color: var(--ink);
+  border: var(--bw) solid var(--line); border-radius: 0;
+}
+textarea { resize: vertical; min-height: 5.5rem; line-height: 1.5; }
+input[type="range"] { width: 100%; accent-color: var(--ink); height: 1.5rem; }
+input[type="checkbox"], input[type="radio"] { width: 1.15rem; height: 1.15rem; accent-color: var(--ink); }
+input[type="color"] { width: 3rem; height: 2.5rem; padding: 0; border: var(--bw) solid var(--line); background: var(--card); }
+fieldset { border: var(--bw) solid var(--line-soft); margin: 0 0 1rem; padding: 0.75rem 1rem 1rem; min-width: 0; }
+legend { padding: 0 0.4rem; }
+
+.segmented { display: inline-flex; flex-wrap: wrap; border: var(--bw) solid var(--line); }
+.segmented label { position: relative; cursor: pointer; }
+.segmented input { position: absolute; opacity: 0; inset: 0; }
+.segmented span {
+  display: block; padding: 0.35rem 0.8rem; font-family: var(--font-ui); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;
+  border-right: var(--bw) solid var(--line); background: var(--card);
+}
+.segmented label:last-child span { border-right: 0; }
+.segmented input:checked + span { background: var(--inv-bg); color: var(--inv-ink); }
+.segmented input:focus-visible + span { outline: 3px solid var(--ink); outline-offset: -5px; }
+
+/* ---- bits & bobs -------------------------------------------------------- */
+mark, .hit { background: var(--inv-bg); color: var(--inv-ink); padding: 0 0.15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+/* <Secret&4> turns into this. Width is the only thing it knows. */
+.censor {
+  display: inline-block; vertical-align: -0.12em;
+  height: 1.05em; width: calc(var(--n, 4) * 0.62em); max-width: 100%;
+  background: #000; outline: 1px solid var(--line-soft); outline-offset: 0;
+  margin: 0 0.05em; cursor: not-allowed; user-select: none;
+}
+:root[data-theme="dark"] .censor { outline-color: #8a8a8a; }
+
+.tag {
+  display: inline-block; padding: 0.15rem 0.6rem; border: var(--bw) solid var(--line);
+  font-family: var(--font-ui); font-weight: 600; font-size: 0.85rem; background: var(--card);
+}
+.muted { color: var(--ink-2); }
+.kbd {
+  display: inline-block; min-width: 1.6rem; padding: 0.05rem 0.4rem; text-align: center;
+  font-family: var(--font-mono); font-size: 0.8rem; border: var(--bw) solid var(--line); border-bottom-width: 4px; background: var(--card);
+}
+
+/* ---- toasts ------------------------------------------------------------- */
+#toasts { position: fixed; right: 1rem; bottom: 6.5rem; z-index: 900; display: grid; gap: 0.5rem; max-width: min(24rem, calc(100vw - 2rem)); pointer-events: none; }
+.toast {
+  pointer-events: auto; padding: 0.7rem 1rem; background: var(--inv-bg); color: var(--inv-ink);
+  border: var(--bw) solid var(--line); font-family: var(--font-ui); font-weight: 600;
+  box-shadow: 4px 4px 0 var(--shadow); animation: toast-in 0.3s var(--ease);
+}
+@keyframes toast-in { from { opacity: 0; transform: translateX(30px) rotateY(30deg); } to { opacity: 1; transform: none; } }
+
+noscript .nojs { position: fixed; inset: 0; display: grid; place-items: center; background: #fff; color: #000; font: 700 1.5rem/1.3 system-ui; padding: 2rem; text-align: center; z-index: 5000; }

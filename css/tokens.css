@@ -1,0 +1,85 @@
+/* ==========================================================================
+   tokens.css — colours, fonts, sizes. The ONLY place colours live.
+   Everything is black, white or a neutral grey. If you add a colour here,
+   the monochrome police will knock on your door.
+   ========================================================================== */
+
+:root {
+  --font-ui: "Bahnschrift", "Roboto Condensed", "Arial Narrow", "Helvetica Neue Condensed", "Segoe UI", system-ui, sans-serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
+
+  --text-scale: 1;
+  --line-gap: 1;
+  --bw: 2px;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur: 0.32s;
+  --tilt: 1;
+  --mx: 0;
+  --my: 0;
+  --topbar-h: 4.25rem;
+}
+
+/* ---- light ------------------------------------------------------------- */
+:root,
+:root[data-theme="light"] {
+  --bg: #d6d6d6;
+  --bg-deep: #c2c2c2;
+  --card: #ffffff;
+  --card-2: #efefef;
+  --ink: #0a0a0a;
+  --ink-2: #454545;
+  --line: #0a0a0a;
+  --line-soft: #8f8f8f;
+  --inv-bg: #0a0a0a;
+  --inv-ink: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.26);
+  --scrim: rgba(255, 255, 255, 0.72);
+  --bg-filter: grayscale(1) contrast(0.9) brightness(1.05);
+}
+
+/* ---- dark -------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  --bg: #0d0d0d;
+  --bg-deep: #000000;
+  --card: #161616;
+  --card-2: #212121;
+  --ink: #f5f5f5;
+  --ink-2: #bfbfbf;
+  --line: #f5f5f5;
+  --line-soft: #5c5c5c;
+  --inv-bg: #f5f5f5;
+  --inv-ink: #0a0a0a;
+  --shadow: rgba(255, 255, 255, 0.16);
+  --scrim: rgba(0, 0, 0, 0.72);
+  --bg-filter: grayscale(1) contrast(1.05) brightness(0.45);
+}
+
+/* ---- high contrast ------------------------------------------------------ */
+:root[data-contrast="high"] { --bw: 3px; --ink-2: var(--ink); --line-soft: var(--ink); --shadow: transparent; }
+:root[data-contrast="high"][data-theme="light"] { --bg: #ffffff; --bg-deep: #ffffff; --card: #ffffff; --card-2: #ffffff; --ink: #000000; --line: #000000; --inv-bg: #000000; --inv-ink: #ffffff; }
+:root[data-contrast="high"][data-theme="dark"] { --bg: #000000; --bg-deep: #000000; --card: #000000; --card-2: #000000; --ink: #ffffff; --line: #ffffff; --inv-bg: #ffffff; --inv-ink: #000000; }
+:root[data-contrast="high"] .bg-image { display: none; }
+
+/* ---- readable font ------------------------------------------------------ */
+:root[data-readable="true"] {
+  --font-ui: "Atkinson Hyperlegible", Verdana, "Segoe UI", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", Verdana, "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  word-spacing: 0.08em;
+}
+
+/* ---- reduced motion ----------------------------------------------------- */
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0ms !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
+:root[data-motion="reduced"] { --tilt: 0; }
+:root[data-tilt="off"] { --tilt: 0; }
+:root[data-tilt="low"] { --tilt: 0.45; }

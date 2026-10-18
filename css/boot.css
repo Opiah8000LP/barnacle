@@ -1,0 +1,60 @@
+/* ==========================================================================
+   boot.css — the loading screen and the "tap to enter" gate.
+   ========================================================================== */
+
+.boot {
+  position: fixed; inset: 0; z-index: 2000;
+  display: grid; place-items: center; padding: 1.5rem;
+  background: var(--bg); perspective: 1200px; overflow: hidden;
+  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), visibility 0s linear 0.5s;
+}
+.boot::before {
+  content: ""; position: absolute; inset: -20%;
+  background-image:
+    linear-gradient(var(--line-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+  background-size: 64px 64px; opacity: 0.35;
+  transform: rotateX(62deg) translateY(10%); transform-origin: 50% 100%;
+  animation: boot-floor 6s linear infinite;
+}
+@keyframes boot-floor { from { background-position: 0 0; } to { background-position: 0 64px; } }
+.boot.is-leaving { opacity: 0; transform: scale(1.06); visibility: hidden; pointer-events: none; }
+
+.boot-card {
+  position: relative; width: min(34rem, 100%); padding: 2rem 2rem 1.5rem;
+  background: var(--card); border: var(--bw) solid var(--line); box-shadow: 10px 10px 0 var(--shadow);
+  transform: rotateY(calc(var(--mx) * 6deg * var(--tilt))) rotateX(calc(var(--my) * -5deg * var(--tilt)));
+  transition: transform 0.2s var(--ease);
+  animation: boot-in 0.7s var(--ease) both;
+}
+@keyframes boot-in { from { opacity: 0; transform: translateZ(-200px) rotateX(40deg); } }
+.boot-card::after {
+  content: ""; position: absolute; left: 2rem; bottom: -0.9rem; width: 1.2rem; height: 1.2rem;
+  background: var(--card); border-right: var(--bw) solid var(--line); border-bottom: var(--bw) solid var(--line);
+  transform: rotate(45deg);
+}
+.boot-eyebrow { font-family: var(--font-ui); font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; font-size: 0.8rem; margin: 0 0 0.4rem; color: var(--ink-2); }
+.boot-title { font-size: clamp(3rem, 14vw, 5.5rem); letter-spacing: 0.04em; text-transform: uppercase; margin: 0 0 1.25rem; }
+
+.boot-bar {
+  position: relative; height: 1.25rem; border: var(--bw) solid var(--line); background: var(--card-2);
+  overflow: hidden;
+}
+.boot-fill {
+  position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--inv-bg);
+  transition: width 0.25s var(--ease);
+}
+.boot-bar::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 14px, var(--card) 14px 16px);
+  pointer-events: none;
+}
+.boot-status { margin: 0.9rem 0 0; font-family: var(--font-ui); font-weight: 600; letter-spacing: 0.03em; min-height: 1.5em; }
+.boot-log { list-style: none; padding: 0; margin: 0.75rem 0 0; max-height: 8rem; overflow: auto; font-family: var(--font-mono); font-size: 0.8rem; border: var(--bw) dashed var(--line-soft); padding: 0.5rem 0.75rem; }
+.boot-log li + li { margin-top: 0.15rem; }
+.boot-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+.boot-enter { min-width: 11rem; min-height: 3.25rem; font-size: 1.15rem; }
+.boot-enter:not(:disabled) { animation: boot-pulse 1.6s ease-in-out infinite; }
+@keyframes boot-pulse { 50% { transform: translateY(-4px); box-shadow: 3px 9px 0 var(--shadow); } }
+.boot-hint { margin: 1rem 0 0; font-size: 0.85rem; color: var(--ink-2); }
+.boot.is-ready { cursor: pointer; }

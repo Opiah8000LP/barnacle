@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" data-theme="light" data-motion="full" data-contrast="normal">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>RDWEEB</title>
+  <meta name="description" content="RDWEEB (also known as DWEEB) — a personal bio site.">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- Picks light/dark before the page paints, so nobody gets flashbanged at 3am. -->
+  <script>
+    (function () {
+      try {
+        var s = JSON.parse(localStorage.getItem('rdweeb:settings') || '{}');
+        var dark = s.theme === 'dark' || ((!s.theme || s.theme === 'auto') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/boot.css">
+  <link rel="stylesheet" href="css/stage.css">
+  <link rel="stylesheet" href="css/blocks.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/overlays.css">
+</head>
+<body>
+  <noscript><div class="nojs">This site needs JavaScript to build its floating menus. Please switch it on and come back!</div></noscript>
+
+  <a class="skip" href="#panel">Skip to main content</a>
+
+  <!-- ===== Loading screen / tap-to-enter gate (filled in by js/loader.js) ===== -->
+  <div id="boot" class="boot" role="dialog" aria-modal="true" aria-labelledby="boot-title">
+    <div class="boot-card" id="boot-card">
+      <p class="boot-eyebrow">Loading</p>
+      <h1 id="boot-title" class="boot-title">RDWEEB</h1>
+      <div class="boot-bar" role="progressbar" aria-label="Loading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <span class="boot-fill" id="boot-fill"></span>
+      </div>
+      <p class="boot-status" id="boot-status" aria-live="polite">Waking things up…</p>
+      <ul class="boot-log" id="boot-log" hidden></ul>
+      <div class="boot-actions">
+        <button type="button" class="btn btn--primary boot-enter" id="boot-enter" disabled>Tap to enter</button>
+        <button type="button" class="btn" id="boot-retry" hidden>Try again</button>
+      </div>
+      <p class="boot-hint" id="boot-hint"></p>
+    </div>
+  </div>
+
+  <!-- ===== The actual site ===== -->
+  <div id="app" class="app" hidden>
+    <div class="backdrop" aria-hidden="true">
+      <div class="bg-image" id="bg-image"></div>
+      <div class="bg-grid"></div>
+      <div class="bg-shapes">
+        <i class="shape shape--1"></i><i class="shape shape--2"></i><i class="shape shape--3"></i><i class="shape shape--4"></i>
+      </div>
+    </div>
+
+    <header class="topbar" role="banner">
+      <button type="button" class="brand" id="brand" aria-label="RDWEEB — go to dashboard">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-name" id="brand-name">RDWEEB</span>
+      </button>
+
+      <div class="searchbox" role="search">
+        <label for="global-search" class="sr-only">Search the whole site</label>
+        <input id="global-search" type="search" placeholder="Search everything…  ( / )" autocomplete="off" spellcheck="false"
+               role="combobox" aria-expanded="false" aria-controls="global-results" aria-autocomplete="list">
+        <div id="global-results" class="results" role="listbox" aria-label="Search results" hidden></div>
+      </div>
+
+      <div class="clock" aria-hidden="true"><span id="clock-date"></span><span id="clock-time"></span></div>
+
+      <div class="tools">
+        <button type="button" class="iconbtn" id="btn-hl-clear" title="Clear search highlight" aria-label="Clear search highlight" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <button type="button" class="iconbtn" id="btn-edit" aria-pressed="false" title="Edit mode (E)" aria-label="Edit mode">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19z"/><path d="M13 7l4 4"/></svg>
+        </button>
+        <button type="button" class="iconbtn" id="btn-sections" title="Manage sections" aria-label="Manage sections" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <button type="button" class="iconbtn" id="btn-settings" title="Settings (S)" aria-label="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>
+        </button>
+        <button type="button" class="iconbtn" id="btn-help" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">?</button>
+      </div>
+    </header>
+
+    <div class="editbar" id="editbar" hidden></div>
+
+    <div class="stage" id="stage">
+      <nav class="orbs" id="orbs" aria-label="Sections"><ul id="orbs-list"></ul></nav>
+
+      <div class="menu" id="menu" aria-label="In this section">
+        <p class="menu-title" id="menu-title"></p>
+        <ul class="menu-list" id="menu-list"></ul>
+      </div>
+
+      <main class="panel" id="panel" tabindex="-1" aria-live="off">
+        <div class="panel-inner" id="panel-inner"></div>
+      </main>
+    </div>
+
+    <aside class="player" id="player" aria-label="Music player"></aside>
+  </div>
+
+  <div id="toasts" aria-hidden="false"></div>
+  <div id="live" class="sr-only" role="status" aria-live="polite"></div>
+
+  <script src="js/loader.js"></script>
+</body>
+</html>
